@@ -1,5 +1,6 @@
-// Array of special characters to be included in password
-var specialCharacters = [
+import { useRef } from "react";
+
+const specialCharacters = [
   '@',
   '%',
   '+',
@@ -26,10 +27,10 @@ var specialCharacters = [
 ];
 
 // Array of numeric characters to be included in password
-var numericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const numericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 // Array of lowercase characters to be included in password
-var lowerCasedCharacters = [
+const lowerCasedCharacters = [
   'a',
   'b',
   'c',
@@ -59,7 +60,7 @@ var lowerCasedCharacters = [
 ];
 
 // Array of uppercase characters to be included in password
-var upperCasedCharacters = [
+const upperCasedCharacters = [
   'A',
   'B',
   'C',
@@ -88,26 +89,22 @@ var upperCasedCharacters = [
   'Z'
 ];
 
-let characterSet = [];
 let passwordLength = 0;
+let characterSet = [];
 
-
-// Function to prompt user for password options
-function getPasswordOptions() { 
+function getPasswordOptions() {
   passwordLength = getPasswordLength();
   getCharacterSetOptions();
 }
 
 function getPasswordLength() {
   let length = 0;
-
   while(length < 8 || length > 128 || isNaN(length)) {
-    length = prompt("How long would you like your password to be? (choose between 8 and 128 characters)");
+    length = prompt("How long would you like your password to be? (enter a number between 8 and 128)");
     if(length < 8 || length > 128 || isNaN(length)) {
-      alert("You must choose a number between 8 and 128.");
+      alert("You must enter a number between 8 and 128");
     }
   }
-
   return length;
 }
 
@@ -116,7 +113,7 @@ function getCharacterSetOptions() {
   while(characterSet.length === 0) {
     if(confirm("Would you like to use lowercase letters in your password?")) {
       characterSet = characterSet.concat(lowerCasedCharacters);
-    } 
+    }
 
     if(confirm("Would you like to use uppercase letters in your password?")) {
       characterSet = characterSet.concat(upperCasedCharacters);
@@ -131,39 +128,52 @@ function getCharacterSetOptions() {
     }
 
     if(characterSet.length === 0) {
-      alert("You must select at least one set of characters to use in your password.");
+      alert("You must choose at least one set of characters for your password.")
     }
   }
-  
 }
 
-// Function for getting a random element from an array
-function getRandom(arr) {
+function getRandomArrayCharacter(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Function to generate password with user input
-function generatePassword() {
-  getPasswordOptions();
+function App() {
+  const passwordRef = useRef();
+
+  function generatePassword() {
+    getPasswordOptions();
+    let password = "";
+    for(let i = 0; i < passwordLength; i++) {
+      password += getRandomArrayCharacter(characterSet);
+    }
   
-  let password = "";
-  for(let i = 0; i < passwordLength; i++) {
-    password += getRandom(characterSet);
+    passwordRef.current.value = password;
   }
-  
-  return password;
+
+  return (
+    <div className="wrapper">
+    <header>
+      <h1>Password Generator</h1>
+    </header>
+    <div className="card">
+      <div className="card-header">
+        <h2>Generate a Password</h2>
+      </div>
+      <div className="card-body">
+        <textarea
+          readOnly
+          id="password"
+          placeholder="Your Secure Password"
+          aria-label="Generated Password"
+          ref={passwordRef}
+        ></textarea>
+      </div>
+      <div className="card-footer">
+        <button className="btn" onClick={generatePassword}>Generate Password</button>
+      </div>
+    </div>
+  </div>
+  )
 }
 
-// Get references to the #generate element
-var generateBtn = document.querySelector('#generate');
-
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector('#password');
-
-  passwordText.value = password;
-}
-
-// Add event listener to generate button
-generateBtn.addEventListener('click', writePassword);
+export default App
