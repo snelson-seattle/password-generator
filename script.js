@@ -112,6 +112,7 @@ function getPasswordLength() {
 }
 
 function getCharacterSetOptions() {
+  characterSet = [];
   while(characterSet.length === 0) {
     if(confirm("Would you like to use lowercase letters in your password?")) {
       characterSet = characterSet.concat(lowerCasedCharacters);
@@ -138,13 +139,19 @@ function getCharacterSetOptions() {
 
 // Function for getting a random element from an array
 function getRandom(arr) {
-  
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // Function to generate password with user input
 function generatePassword() {
   getPasswordOptions();
   
+  let password = "";
+  for(let i = 0; i < passwordLength; i++) {
+    password += getRandom(characterSet);
+  }
+  
+  return password;
 }
 
 // Get references to the #generate element
