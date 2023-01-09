@@ -88,10 +88,29 @@ var upperCasedCharacters = [
   'Z'
 ];
 
+let characterSet = [];
+let passwordLength = 0;
+
 
 // Function to prompt user for password options
 function getPasswordOptions() { 
+  passwordLength = getPasswordLength();
 }
+
+function getPasswordLength() {
+  let length = 0;
+
+  while(length < 8 || length > 128 || isNaN(length)) {
+    length = prompt("How long would you like your password to be? (choose between 8 and 128 characters)");
+    if(length < 8 || length > 128 || isNaN(length)) {
+      alert("You must choose a number between 8 and 128.");
+    }
+  }
+
+  return length;
+}
+
+function getCharacterSetOptions() {}
 
 // Function for getting a random element from an array
 function getRandom(arr) {
@@ -100,6 +119,7 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
+  getPasswordOptions();
   
 }
 
