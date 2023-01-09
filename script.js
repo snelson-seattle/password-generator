@@ -95,6 +95,7 @@ let passwordLength = 0;
 // Function to prompt user for password options
 function getPasswordOptions() { 
   passwordLength = getPasswordLength();
+  getCharacterSetOptions();
 }
 
 function getPasswordLength() {
@@ -110,7 +111,30 @@ function getPasswordLength() {
   return length;
 }
 
-function getCharacterSetOptions() {}
+function getCharacterSetOptions() {
+  while(characterSet.length === 0) {
+    if(confirm("Would you like to use lowercase letters in your password?")) {
+      characterSet = characterSet.concat(lowerCasedCharacters);
+    } 
+
+    if(confirm("Would you like to use uppercase letters in your password?")) {
+      characterSet = characterSet.concat(upperCasedCharacters);
+    }
+
+    if(confirm("Would you like to use special characters in your password?")) {
+      characterSet = characterSet.concat(specialCharacters);
+    }
+
+    if(confirm("Would you like to use numbers in your password?")) {
+      characterSet = characterSet.concat(numericCharacters);
+    }
+
+    if(characterSet.length === 0) {
+      alert("You must select at least one set of characters to use in your password.");
+    }
+  }
+  
+}
 
 // Function for getting a random element from an array
 function getRandom(arr) {
